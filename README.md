@@ -80,26 +80,28 @@ Na verdade, todas as libs que utilizarem o validator.js na versão 13.5.1 estão
 ![](./images/dependents_packages_validatorjs.png)
 ## Como posso previnir esse ataque?
 
-Usar uma lib de terceiros para fazer validação de regex. Se atentar ao criar regex que não possuam repetição e caminhos alternativos
+Bem, sabendo que nunca estaremos 100% seguros e que tudo é uma questão de mitigar riscos nós podemos seguir as seguintes recomendações:
 
-Usar alguma linguagem que não possua backtracking.
+* Evite criar regex por conta própria, prefira utilizar bibliotecas especializadas em validações, e mesmo com as falhas que apresentei aqui, utilizar essas bibliotecas é a melhor alternativa, pois existem
+muitas pessoas empenhadas em melhorar e corrigir esses bugs nesse projetos. Lembre-se sempre da [Lei de Linus](https://pt.wikipedia.org/wiki/Lei_de_Linus): "Dados olhos suficientes, todos os erros são óbvios".
 
-Evite criar regex por conta própria, use bibliotecas de terceiros:
+* Se for criar alguma regex por conta própria, se atente para não adicionar regex que possam levar a ambiguidade, evite grupos com repetições como por exemplo a regex `(a|aa)+`.
 
-Algumas linguagens e algorítmos são imunes:
+* Como falado anteriormente ataques de ReDoS só são possíveis devido a implementações que utilizam backtracking ou alguma outra técnica de busca que se baseia nesse conceito.
+Linguagens como Golang, Rust não utilizam esse tipo de algoritmo. Um exemplo de algoritmo que não utiliza backtrack é uma biblioteca [re2](https://www.npmjs.com/package/re2) criada pelo Google.
 
-https://github.com/davisjam/vuln-regex-detector
-https://github.com/davisjam/safe-regex
+* Projetos como o [vuln-regex-detector](https://github.com/davisjam/vuln-regex-detector), escaneiam o seu código por expressões regulares mal feitas e que podem levar a um ataque ReDoS.
 
-https://github.com/google/re2 - Lib que n usa backtrack
-https://www.npmjs.com/package/re2
+* Por último e não menos importate, sempre mantenha suas dependências atualizadas. (Regra de ouro)
 
 ## Referências
 
 https://en.wikipedia.org/wiki/Regular_expression
-https://www.regular-expressions.info/catastrophic.html
-https://levelup.gitconnected.com/the-regular-expression-denial-of-service-redos-cheat-sheet-a78d0ed7d865
-https://lirantal.medium.com/node-js-pitfalls-how-a-regex-can-bring-your-system-down-cbf1dc6c4e02
-https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
 
-https://discuss.rubyonrails.org/t/cve-2021-22880-possible-dos-vulnerability-in-active-record-postgresql-adapter/77129https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=REDoS
+https://www.regular-expressions.info/catastrophic.html
+
+https://levelup.gitconnected.com/the-regular-expression-denial-of-service-redos-cheat-sheet-a78d0ed7d865
+
+https://lirantal.medium.com/node-js-pitfalls-how-a-regex-can-bring-your-system-down-cbf1dc6c4e02
+
+https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
