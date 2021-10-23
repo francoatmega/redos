@@ -55,9 +55,9 @@ O problemas de todas essas regex acima são a ambiguidade, utilizam grupos com r
 
 ## Estou vulnerável a esse tipo de ataque?
 
-Agora que já vimos um pouco de teoria vamos para a parte prática. Já vimos o que são regex, como são processadas, quais as vulnerabilidades que pode ser exploradas, e alguns exemplos mais triviais. Mas será que essa falha pode ser explorar em um ambiente real, de produção, será se meu sistema tá vulnerável a esse tipo de ataque? 
+Agora que já vimos um pouco de teoria vamos para a parte prática. Já vimos o que são regex, como são processadas, quais as vulnerabilidades que pode ser exploradas, e alguns exemplos mais triviais. Mas será que essa falha pode ser explorar em um ambiente real, de produção, será se meu sistema tá vulnerável a esse tipo de ataque? Você pode perguntar ao [Cloudflare](https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/) ou ao [StackOverflow](https://stackstatus.net/post/147710624694/outage-postmortem-july-20-2016), que tiveram seus serviços interrompidos e na análise post mortem, foi identificado que a causa da interrupação foram falhas de ReDoS. 
 
-Uma rápida busca no CVE retornou o seguinte resultado:
+Mas vamos tentar encontrar outras referências dessa falha, o [banco de dados da CVE](https://cve.mitre.org/) pode ser um bom ponto de partida e uma rápida pesquisa sobre ReDoS trouxe os seguinte resultados:
 
 ![](./images/search_result_cve_redos.png)
 
@@ -85,7 +85,7 @@ Bem, sabendo que nunca estaremos 100% seguros e que tudo é uma questão de miti
 * Evite criar regex por conta própria, prefira utilizar bibliotecas especializadas em validações, e mesmo com as falhas que apresentei aqui, utilizar essas bibliotecas é a melhor alternativa, pois existem
 muitas pessoas empenhadas em melhorar e corrigir esses bugs nesse projetos. Lembre-se sempre da [Lei de Linus](https://pt.wikipedia.org/wiki/Lei_de_Linus): "Dados olhos suficientes, todos os erros são óbvios".
 
-* Se for criar alguma regex por conta própria, se atente para não adicionar regex que possam levar a ambiguidade, evite grupos com repetições como por exemplo a regex `(a|aa)+`.
+* Se for criar alguma regex por conta própria, se atente para não adicionar regex que possam levar a ambiguidade, evite grupos com repetições como por exemplo a regex `(a|aa)+`. Mais exemplos de padrões para se evitar em regex podem ser encontrados [aqui](https://www.regular-expressions.info/catastrophic.html) e [aqui](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS).
 
 * Como falado anteriormente ataques de ReDoS só são possíveis devido a implementações que utilizam backtracking ou alguma outra técnica de busca que se baseia nesse conceito.
 Linguagens como Golang, Rust não utilizam esse tipo de algoritmo. Um exemplo de algoritmo que não utiliza backtrack é uma biblioteca [re2](https://www.npmjs.com/package/re2) criada pelo Google.
