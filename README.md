@@ -67,11 +67,13 @@ E óbviamente essa lista não estã atualizada, pois a falha que irei utilizar c
 
 * A biblioteca [validator.js](https://www.npmjs.com/package/validator) na versão 13.5.1 possui algumas falhas de ReDoS que foram prontamente [corrigida pelos seus mantenedores](https://github.com/validatorjs/validator.js/pull/1651), as validações [isEmail](https://github.com/validatorjs/validator.js/issues/1597) e [isHSL](https://github.com/validatorjs/validator.js/issues/1598) são as que estão vulneráveis, vamos tentar reproduzir isso localmente.
 
-* A biblioteca jsPDF na versão [2.3.1](https://github.com/parallax/jsPDF/commit/d8bb3b39efcd129994f7a3b01b632164144ec43e) está vulnerável.
+* A biblioteca jsPDF na versão [2.3.1](https://github.com/parallax/jsPDF/commit/d8bb3b39efcd129994f7a3b01b632164144ec43e) está vulnerável a ReDoS.
 
-* A biblioteca is-email na versão [1.0.0](https://github.com/segmentio/is-email/commit/060ecedf345729f11ad857ccaf7a915ff6797739) está vulnerável.
+* A biblioteca is-email na versão [1.0.0](https://github.com/segmentio/is-email/commit/060ecedf345729f11ad857ccaf7a915ff6797739) está vulnerável a ReDoS.
 
-* O ORM Sequelize na versão [6.6.4](https://github.com/sequelize/sequelize/commit/5fa695fd4f81faeae3528bf4aae519dfd1e5b1ae) está vulnerável, por que utiliza o validator.js para fazer a validação de dados em seus modelos.
+* A biblioteca js-xss na versão [1.0.9](https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1759311) está vulnerável a ReDoS.
+
+* O ORM Sequelize na versão [6.6.4](https://github.com/sequelize/sequelize/commit/5fa695fd4f81faeae3528bf4aae519dfd1e5b1ae) está vulnerável a ReDoS, por que utiliza o validator.js para fazer a validação de dados em seus modelos.
 
 Na verdade, todas as libs que utilizarem o validator.js na versão 13.5.1 estão possivelmente vulneráveis a esse ataque, caso utilizem alguma versão desatualizada desse pacote, a imagem abaixo mostra que existem atualmente 5381 pacotes dependentes do validator.js.
 
