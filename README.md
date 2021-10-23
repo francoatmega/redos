@@ -31,7 +31,7 @@ As regex podem ser e são utilizadas em uma variadade de contextos, desde de val
 
 ## O que é um ataque ReDoS?
 
-ReDoS ([CWE-1333](https://cwe.mitre.org/data/definitions/1333.html)) é o acrônimo de Regular Expression Denial of Service, o que pode ser traduzido em ataque de Negação de Serviço de Expressão Regular.
+ReDoS ([CWE-1333](https://cwe.mitre.org/data/definitions/1333.html)) é o acrônimo de Regular Expression Denial of Service, o que pode ser traduzido em Ataque de Negação de Serviço de Expressão Regular.
 É um ataque que afeta a disponibilidade de um sistema, ele é viável devido a implementação de alguns algoritmos de análise de expressões regulares, 
 que possuem uma complexidade algorítmica exponencial no pior caso. Sendo assim uma falha de ReDoS explorada com sucesso pode fazer com que um
 sistema demore tempo demais para analisar uma expressão regular e consuma muito recurso de processamento, deixando o sistema lento ou até mesmo 
@@ -40,7 +40,7 @@ inviabilizando o serviço.
 ## Como funciona um ataque ReDoS?
 
 Algumas implementações de algoritmos de interpretação de expressões regulares utilizam uma técnica chamada [backtracking](https://pt.wikipedia.org/wiki/Backtracking), que é bastante utilizada
-em algoritmos de busca. Utilizando essa técnica o algoritmo tenta encontrar todos os caminhos possíveis para um problema, em um determinado passo da busca caseo ele não encontre nada, ele retorna ao estado de busca anterior e
+em algoritmos de busca. Utilizando essa técnica o algoritmo tenta encontrar todos os caminhos possíveis para um problema, em um determinado passo da busca caso ele não encontre nada, ele retorna ao estado de busca anterior e
 tenta buscar por outro caminho, e continua fazendo esse processo até que todas as possibilidades tenham sido esgotadas. Abaixo temos alguns exemplos de expressões regulares que podem permitir um ataque ReDoS:
 
 (a+)+
@@ -51,7 +51,7 @@ tenta buscar por outro caminho, e continua fazendo esse processo até que todas 
 
 ^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$
 
-O problemas de todas essas regex acima são a ambiguidade, utilizam grupos com repetição, e como dito anteriormente, dependendo do algorítimo que analise essas regex e do texto que elas forem aplicadas, o seu sistema pode sofrer uma negação de serviço. 
+O problemas de todas essas regex acima são a ambiguidade, utilizam grupos com repetição, e como dito anteriormente, dependendo do algorítimo que analise essas regex e do texto ao qual elas forem aplicadas, o seu sistema pode sofrer uma negação de serviço. 
 
 ## Estou vulnerável a esse tipo de ataque?
 
