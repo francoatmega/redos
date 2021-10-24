@@ -43,15 +43,23 @@ Algumas implementações de algoritmos de interpretação de expressões regular
 em algoritmos de busca. Utilizando essa técnica o algoritmo tenta encontrar todos os caminhos possíveis para um problema, em um determinado passo da busca caso ele não encontre nada, ele retorna ao estado de busca anterior e
 tenta buscar por outro caminho, e continua fazendo esse processo até que todas as possibilidades tenham sido esgotadas. Abaixo temos alguns exemplos de expressões regulares que podem permitir um ataque ReDoS:
 
-(a+)+
+`(a+)+`
 
-([a-zA-Z]+)*
+`(a|aa)+`
 
-^(([a-z])+.)+[A-Z]([a-z ])+$
+`^[\s]+|[\s]+$`
 
-^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$
+`^[\s\u200c]+|[\s\u200c]+$`
 
-O problemas de todas essas regex acima são a ambiguidade, utilizam grupos com repetição, e como dito anteriormente, dependendo do algorítimo que analise essas regex e do texto ao qual elas forem aplicadas, o seu sistema pode sofrer uma negação de serviço. 
+`([a-zA-Z]+)*`
+
+`^(([a-z])+.)+[A-Z]([a-z ])+$`
+
+`^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$`
+
+`(?:(?:\"|'|\]|\}|\\|\d|(?:nan|infinity|true|false|null|undefined|symbol|math)|\|\-|\+)+[)]*;?((?:\s|-|~|!|{}|\|\||\+)*.*(?:.*=.*)))`
+
+O problemas de todas essas regex acima são a ambiguidade, utilizam grupos com repetição ou alternância, e como dito anteriormente, dependendo do algorítimo que analise essas regex e do texto ao qual elas forem aplicadas, o seu sistema pode sofrer uma negação de serviço. 
 
 ## Estou vulnerável a esse tipo de ataque?
 
@@ -63,9 +71,9 @@ Mas vamos tentar encontrar outras referências dessa falha, o [banco de dados da
 
 97 ocorrências de falhas ReDoS reportadas, em diversos tipos de linguagens e bibliotecas.
 
-E óbviamente essa lista não estã atualizada, pois a falha que irei utilizar como exemplo não está no resultado da busca. Veremos abaixo alguns softwares que tiveram falhas reportadas de ReDoS, mas não foram catalogadas com seu CVE, e, se você estiver utilizando  alguma versão que demonstrarei abaixo sugiro atualizar o seu ambiente o quanto antes:
+E, obviamente, essa lista não está atualizada, pois a falha que irei utilizar como exemplo não está no resultado da busca. Veremos abaixo alguns softwares que tiveram falhas reportadas de ReDoS, mas não foram catalogadas com seu CVE, e, se você estiver utilizando alguma versão que listarei abaixo sugiro atualizar o seu ambiente o quanto antes:
 
-* A biblioteca [validator.js](https://www.npmjs.com/package/validator) na versão 13.5.1 possui algumas falhas de ReDoS que foram prontamente [corrigida pelos seus mantenedores](https://github.com/validatorjs/validator.js/pull/1651), as validações [isEmail](https://github.com/validatorjs/validator.js/issues/1597) e [isHSL](https://github.com/validatorjs/validator.js/issues/1598) são as que estão vulneráveis, vamos tentar reproduzir isso localmente.
+* A biblioteca [validator.js](https://www.npmjs.com/package/validator) na versão 13.5.1 possui algumas falhas de ReDoS que foram prontamente [corrigida pelos seus mantenedores](https://github.com/validatorjs/validator.js/pull/1651), as validações [isEmail](https://github.com/validatorjs/validator.js/issues/1597) e [isHSL](https://github.com/validatorjs/validator.js/issues/1598) são as que estão vulneráveis.
 
 * A biblioteca jsPDF na versão [2.3.1](https://github.com/parallax/jsPDF/commit/d8bb3b39efcd129994f7a3b01b632164144ec43e) está vulnerável a ReDoS.
 
@@ -88,7 +96,7 @@ muitas pessoas empenhadas em melhorar e corrigir esses bugs nesse projetos. Lemb
 * Se for criar alguma regex por conta própria, se atente para não adicionar regex que possam levar a ambiguidade, evite grupos com repetições como por exemplo a regex `(a|aa)+`. Mais exemplos de padrões para se evitar em regex podem ser encontrados [aqui](https://www.regular-expressions.info/catastrophic.html) e [aqui](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS).
 
 * Como falado anteriormente ataques de ReDoS só são possíveis devido a implementações que utilizam backtracking ou alguma outra técnica de busca que se baseia nesse conceito.
-Linguagens como Golang, Rust não utilizam esse tipo de algoritmo. Um exemplo de algoritmo que não utiliza backtrack é uma biblioteca [re2](https://www.npmjs.com/package/re2) criada pelo Google.
+Linguagens como Golang, Rust não utilizam esse tipo de algoritmo. Um exemplo de algoritmo que não utiliza backtrack é uma biblioteca [re2](https://www.npmjs.com/package/re2) criada pelo Google, e que possui wrappers em diversas linguagens.
 
 * Projetos como o [vuln-regex-detector](https://github.com/davisjam/vuln-regex-detector), escaneiam o seu código por expressões regulares mal feitas e que podem levar a um ataque ReDoS.
 
