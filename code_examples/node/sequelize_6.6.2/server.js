@@ -8,12 +8,16 @@ const port = 3000;
 app.use(parser.json())
 
 app.post('/user', async (req, res) => {
-    console.time('--- Creating user ---')
-    await User.create({
-        username: req.body.username,
-        email: req.body.email,
-    });
-    console.timeEnd('--- Creating user ---')
+    try {
+      await User.create({
+          username: req.body.username,
+          email: req.body.email,
+      });
+    } catch (err) {
+      return res.send({
+        "error": "Error during create user"
+      });
+    }
 })
 
 app.get('/users', async (req, res) => {
